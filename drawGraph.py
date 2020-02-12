@@ -21,6 +21,8 @@ csv_data=pd.read_csv("./Edges_separate.csv")
 
 source=np.array(csv_data['Source']).reshape(-1,1)
 target=np.array(csv_data['Target']).reshape(-1,1)
+# source=np.array(csv_data['Source'].head(1000)).reshape(-1,1)
+# target=np.array(csv_data['Target'].head(1000)).reshape(-1,1)
 
 
 # In[6]:
@@ -51,8 +53,9 @@ print("The Graph has %d number of selfloops!" % G.number_of_selfloops())
 
 # In[ ]:
 
-
-nx.draw(G, with_labels=True)
+pos=nx.random_layout(G)
+plt.figure(figsize=(256,256))
+nx.draw(G, pos=pos,with_labels=True)
 plt.savefig("Graph.png")
 plt.show()
 
