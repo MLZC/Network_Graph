@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 data_path = './selected_edges.csv'
 
-class nextworker(object):
+class networker(object):
     def __init__(self,data_path):
         self.data_path = data_path
         self.edges = None
@@ -19,16 +19,19 @@ class nextworker(object):
         source=np.array(csv_data['Source']).reshape(-1,1)
         target=np.array(csv_data['Target']).reshape(-1,1)
         edges=np.concatenate((source,target),axis=1)
-        nextworker.edges = edges
+        self.edges = edges
     def build_graph(self):
         G=nx.Graph()
         G.add_edges_from(self.edges)
         self.graph = G
-
+    def build_adjacency(self):
+        self.adjacency = nx.adjacency_matrix(self.graph)
+        return self.adjacency
     def get_graph_details(self):
         print("The Graph has %d number of nodes!" % self.graph.number_of_nodes())
         print("The Graph has %d number of edges!" % self.graph.number_of_edges())
         print("The Graph has %d number of selfloops!" % self.graph.number_of_selfloops())
+
 
     def visualize_network(self):
         pos=nx.random_layout(self.graph)
@@ -64,9 +67,10 @@ class nextworker(object):
             print(k,v)
 
 if __name__ == "__main__":
-    nextworker = nextworker(data_path)
-    nextworker.data_loader()
-    nextworker.build_graph()
-    nextworker.get_graph_details()
-    nextworker.get_rank_of_nodes()
-    nextworker.visualize_network()
+    networker = networker(data_path)
+    networker.data_loader()
+    networker.build_graph()
+    networker.build_adjacency()
+    networker.get_graph_details()
+    networker.get_rank_of_nodes()
+    networker.visualize_network()
