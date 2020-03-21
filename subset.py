@@ -37,12 +37,15 @@ class Subsets(object):
             for i in edges:
                 if i[0] in subset and i[1] in subset:
                     edges_subset.append(i)
-            self.networker.edges = edges_subset
-            self.networker.build_graph()
-            G_adjacency = self.networker.build_adjacency()
-            for i in range(len(subset)):
-                alphas[i] = (np.sum(G_adjacency**i)-np.trace(G_adjacency))/2
-            return alphas
+            if len(edges_subset)==0:
+                return alphas
+            else:
+                self.networker.edges = edges_subset
+                self.networker.build_graph()
+                G_adjacency = self.networker.build_adjacency()
+                for i in range(len(subset)):
+                    alphas[i] = (np.sum(G_adjacency**i)-np.trace(G_adjacency))/2
+                return alphas
     def get_listOfAlphas(self,edges,whole_set):
         subsets_list = self.get_subsets(whole_set)
         alphas_list = []

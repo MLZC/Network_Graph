@@ -25,7 +25,7 @@ class networker(object):
         G.add_edges_from(self.edges)
         self.graph = G
     def build_adjacency(self):
-        self.adjacency = nx.adjacency_matrix(self.graph)
+        self.adjacency = np.array(nx.adjacency_matrix(self.graph).todense())
         return self.adjacency
     def get_graph_details(self):
         print("The Graph has %d number of nodes!" % self.graph.number_of_nodes())
