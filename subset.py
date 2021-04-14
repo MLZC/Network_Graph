@@ -44,7 +44,7 @@ class Subsets(object):
         self.edges = networker.edges
         self.networker.build_graph()
         edges2Nodes(self.networker)
-        nx.write_adjlist(networkHandler.graph,'./adjlist.txt')
+        nx.write_adjlist(self.networker.graph,'./adjlist.txt')
 
 
     def get_subsets(self, whole_set):
