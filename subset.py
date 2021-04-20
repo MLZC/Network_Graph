@@ -52,7 +52,7 @@ class Subsets(object):
         output = [[]]
         for i in whole_set:
             output.extend([subset + [i] for subset in output])
-        subsets_list = [set(x) for x in output[1:-1]]
+        subsets_list = [set(x) for x in output[1:]]
         return subsets_list
     def get_path_subedges_set(self,edges,subset):
         '''
