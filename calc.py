@@ -3,12 +3,8 @@ import math
 import networkx as nx
 from subset import Subsets
 from drawGraph import networker
+import pandas as pd
 
-
-
-data_path = './selected_edges.csv'
-
-networker = networker(data_path)
 
 
 class Shaply_calcer(object):
@@ -49,7 +45,7 @@ class Shaply_calcer(object):
         Y_values = []
         self.generate_vector()
         for i in range(self.n):
-            Y_values.append(self.calc_Yi(i+1))
+            Y_values.append(self.calc_Yi(i))
         self.Y_values = Y_values
     def get_parameters(self):
         print("self.L : ",self.L)
@@ -84,24 +80,32 @@ if __name__ == "__main__":
     # Shaply.get_parameters()
 
 
-    ### test 3.19
+    ### 1000 nodes
+    for i in range(100):
 
-    subsets_builder = Subsets(networker)
-    print("***"*20)
-    whole_set = nx.nodes(subsets_builder.networker.graph)
+        data_path = './edges/edges_' + str(i) + '.csv'
 
-    L = len(whole_set)
-    r = 1
-    n = len(whole_set)
+        networker = networker(data_path)
 
-    v_set, alpha = subsets_builder.get_listOfAlphas(subsets_builder.edges,whole_set)
+        subsets_builder = Subsets(networker)
+        print("***"*20)
+        whole_set = nx.nodes(subsets_builder.networker.graph)
 
-    ### Do not change
-    alpha = np.array(alpha).reshape(-1,L)
-    Shaply = Shaply_calcer(L,r,alpha,v_set,n)
-    Shaply.start()
-    Shaply.get_parameters()
-    # print(whole_set)
-    # subsets = Subsets()
-    # subsets_list = subsets.get_subsets(whole_set)
-    # print(subsets_list)
+        L = len(whole_set)
+        r = 1
+        n = len(whole_set)
+
+        v_set, alpha = subsets_builder.get_listOfAlphas(subsets_builder.edges,whole_set)
+        ### Do not change
+        alpha = np.array(alpha).reshape(-1,L)
+        Shaply = Shaply_calcer(L,r,alpha,v_set,n)
+        Shaply.start()
+        Shaply.get_parameters()
+        Y_values = Shaply.Y_values
+        Y_valuesDF = pd.DataFrame(Y_values)
+        Y_valuesDF.columns = ['Y']
+        Y_valuesDF.to_csv('./results/results_' + data_path.split('_')[1],  index=None)
+        # print(whole_set)
+        # subsets = Subsets()
+        # subsets_list = subsets.get_subsets(whole_set)
+        # print(subsets_list)
