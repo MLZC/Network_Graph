@@ -81,13 +81,20 @@ if __name__ == "__main__":
 
 
     ### 1000 nodes
+    edges_reNumbered = pd.DataFrame(columns=['Source', 'Target'])
+    results = pd.DataFrame(columns=['Y'])
     for i in range(100):
 
-        data_path = './edges/edges_' + str(i) + '.csv'
+        edges_path = './edges/edges_' + str(i) + '.csv'
+        ## the following four line just for re-number the edgeId -- prepare for Gephi
+        edges = pd.read_csv(edges_path)
+        edges['Source'] = edges['Source'] + i*10
+        edges['Target'] = edges['Target'] + i*10
+        edges_reNumbered = pd.concat([edges_reNumbered, edges], sort=False, ignore_index=True)
+        
+        Networker = networker(edges_path)
 
-        networker = networker(data_path)
-
-        subsets_builder = Subsets(networker)
+        subsets_builder = Subsets(Networker)
         print("***"*20)
         whole_set = nx.nodes(subsets_builder.networker.graph)
 
@@ -104,8 +111,12 @@ if __name__ == "__main__":
         Y_values = Shaply.Y_values
         Y_valuesDF = pd.DataFrame(Y_values)
         Y_valuesDF.columns = ['Y']
-        Y_valuesDF.to_csv('./results/results_' + data_path.split('_')[1],  index=None)
+#         Y_valuesDF.to_csv('./results/results_' + edges_path.split('_')[1],  index=None)
         # print(whole_set)
         # subsets = Subsets()
         # subsets_list = subsets.get_subsets(whole_set)
         # print(subsets_list)
+#         df  = pd.read_csv('./results/results_' + str(i) + '.csv') 
+        results = pd.concat([results,Y_valuesDF],sort=False,ignore_index=True)
+    results.to_csv('./results/results.csv',  index=None)
+    edges_reNumbered.to_csv('./edges/edges_reNumbered.csv', index=None)
